@@ -1,29 +1,47 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: linear-gradient(135deg, pink, gold);
+* {
+  box-sizing: border-box;
 }
 
-.hidden { display: none; }
-
-#lockScreen {
-  height: 100vh;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffc0cb, #ffd700);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+/* LOCK SCREEN */
+#lockScreen {
+  text-align: center;
+}
+
+#lockScreen input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+#lockScreen button {
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+
+/* CARD */
+.hidden {
+  display: none;
 }
 
 #card {
   width: 90vw;
   max-width: 360px;
-  margin: auto;
   perspective: 1000px;
 }
 
 .card-inner {
+  position: relative;
   width: 100%;
-  height: 600px;
+  height: 560px;
   transition: transform 0.8s;
   transform-style: preserve-3d;
 }
@@ -32,52 +50,63 @@ body {
   transform: rotateY(180deg);
 }
 
-.card-front, .card-back {
+.card-front,
+.card-back {
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  padding: 24px;
+  border-radius: 24px;
   backface-visibility: hidden;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.card-front {
   background: linear-gradient(#ffd700, #ffb6c1);
 }
 
 .card-back {
-  background: linear-gradient(#ffb6c1, #ffd700);
   transform: rotateY(180deg);
 }
 
+h1 {
+  text-align: center;
+}
+
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  gap: 16px;
+  margin-top: 24px;
 }
 
 .token {
-  height: 100px;
+  aspect-ratio: 1 / 1;
   border: 2px dashed white;
-  border-radius: 15px;
+  border-radius: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   cursor: pointer;
+  background: rgba(255,255,255,0.15);
 }
 
 .token.redeemed {
   background: rgba(255,255,255,0.7);
-  animation: stamp 0.5s ease;
+  color: #ff69b4;
+  animation: stamp 0.4s ease;
 }
 
 @keyframes stamp {
-  from { transform: scale(2); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(2) rotate(-15deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(-15deg);
+    opacity: 1;
+  }
 }
 
+/* DARK MODE */
 .dark {
   background: #111;
   color: white;

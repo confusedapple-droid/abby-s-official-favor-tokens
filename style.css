@@ -145,6 +145,11 @@ button {
    DARK MODE
 ===================== */
 .dark {
-  background: #111;
+  background: linear-gradient(135deg, #6a0dad, #b11226);
   color: white;
 }
+.dark .card-front,
+.dark .card-back {
+  background: linear-gradient(135deg, #7b2cbf, #c1121f);
+}
+

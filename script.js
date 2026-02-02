@@ -73,12 +73,17 @@ function resetTokens() {
    DARK MODE
 ===================== */
 function toggleDark() {
-  const isDark = document.body.classList.toggle("dark");
-  const toggleBtn = document.getElementById("themeToggle");
+  const body = document.body;
+  const btn = document.getElementById("themeToggle");
 
-  toggleBtn.textContent = isDark ? "☀️" : "🌙";
+  body.classList.toggle("dark");
+
+  if (body.classList.contains("dark")) {
+    btn.innerText = "☀️";
+  } else {
+    btn.innerText = "🌙";
+  }
 }
-
 }
 
 /* =====================

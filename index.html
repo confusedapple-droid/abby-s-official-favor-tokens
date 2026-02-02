@@ -14,40 +14,47 @@
 <body>
 
 <div id="app">
-  <div id="cardContainer" class="front">
+  <div id="flipCard" class="flip-card">
 
-    <h1>FAVOR TOKENS</h1>
+    <!-- FRONT -->
+    <div id="cardContainer" class="card-face front">
+      <h1>FAVOR TOKENS</h1>
 
-    <div class="grid">
-      <div class="token" data-id="1"></div>
-      <div class="token" data-id="2"></div>
-      <div class="token" data-id="3"></div>
-      <div class="token" data-id="4"></div>
-      <div class="token" data-id="5"></div>
-      <div class="token" data-id="6"></div>
+      <div class="grid">
+        <div class="token" data-id="1"></div>
+        <div class="token" data-id="2"></div>
+        <div class="token" data-id="3"></div>
+        <div class="token" data-id="4"></div>
+        <div class="token" data-id="5"></div>
+        <div class="token" data-id="6"></div>
+      </div>
+
+      <button id="rulesBtn">Rules & Reset</button>
     </div>
 
-    <button id="rulesBtn">Rules & Reset</button>
-  </div>
+    <!-- BACK -->
+    <div id="rulesCard" class="card-face back">
+      <h2>GENIE RULES</h2>
+      <ul>
+        <li>No wishing for more wishes</li>
+        <li>No bringing back the dead</li>
+        <li>No forcing love</li>
+        <li>Tokens are non-transferable</li>
+      </ul>
 
-  <div id="rulesCard" class="back hidden">
-    <h2>GENIE RULES</h2>
-    <ul>
-      <li>No wishing for more wishes</li>
-      <li>No bringing back the dead</li>
-      <li>No forcing love</li>
-      <li>Tokens are non-transferable</li>
-    </ul>
-    <p class="hint">(Tap empty background to return)</p>
+      <p class="hint">(Tap empty background to return)</p>
 
-    <input id="resetInput" type="password" placeholder="Reset Password">
-    <button id="resetBtn">Reset Tokens</button>
-    <p id="resetStatus"></p>
+      <input id="resetInput" type="password" placeholder="Reset Password">
+      <button id="resetBtn">Reset Tokens</button>
+      <p id="resetStatus"></p>
+    </div>
+
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>

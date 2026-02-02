@@ -1,87 +1,56 @@
-/***** CONFIG *****/
-const RESET_PASSWORD = 'apple';
+const SECRET_UNLOCK = "Abby Siervo";
+const RESET_PASSWORD = "apple";
+const TOTAL = 6;
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXX",
-  appId: "XXX"
-};
+const grid = document.getElementById("tokenGrid");
 
-/***** INIT *****/
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const tokensRef = db.ref('tokens');
-
-/***** ELEMENTS *****/
-const flipCard = document.getElementById('flipCard');
-const rulesBtn = document.getElementById('rulesBtn');
-const rulesCard = document.getElementById('rulesCard');
-const resetBtn = document.getElementById('resetBtn');
-const resetInput = document.getElementById('resetInput');
-const resetStatus = document.getElementById('resetStatus');
-const tokens = document.querySelectorAll('.token');
-
-/***** FLIP LOGIC *****/
-rulesBtn.onclick = () => {
-  flipCard.classList.add('flipped');
-};
-
-rulesCard.onclick = (e) => {
-  if (e.target === rulesCard) {
-    flipCard.classList.remove('flipped');
+function unlock() {
+  if (unlockInput.value === SECRET_UNLOCK) {
+    lockScreen.classList.add("hidden");
+    card.classList.remove("hidden");
+    loadTokens();
   }
-};
-
-/***** SYNC TOKENS *****/
-tokensRef.on('value', snap => {
-  const data = snap.val() || {};
-  tokens.forEach(t => {
-    t.classList.toggle('redeemed', data[t.dataset.id]);
-  });
-});
-
-/***** REDEEM FUNCTION *****/
-function redeemToken(id) {
-  tokensRef.child(id).transaction(v => v ? true : true);
 }
 
-/***** TAP TO REDEEM *****/
-tokens.forEach(token => {
-  token.onclick = () => redeemToken(token.dataset.id);
-});
+function loadTokens() {
+  grid.innerHTML = "";
+  for (let i = 0; i < TOTAL; i++) {
+    const t = document.createElement("div");
+    t.className = "token";
+    t.innerText = "TAP";
+    t.onclick = () => redeem(i);
+    grid.appendChild(t);
 
-/***** DRAW / SWIPE TO REDEEM *****/
-let startX = null;
-let startY = null;
-
-tokens.forEach(token => {
-  token.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    startX = t.clientX;
-    startY = t.clientY;
-  });
-
-  token.addEventListener('touchend', e => {
-    if (!startX || !startY) return;
-    const t = e.changedTouches[0];
-    const dx = Math.abs(t.clientX - startX);
-    const dy = Math.abs(t.clientY - startY);
-    if (dx + dy > 40) redeemToken(token.dataset.id);
-    startX = startY = null;
-  });
-});
-
-/***** RESET *****/
-resetBtn.onclick = () => {
-  if (resetInput.value !== RESET_PASSWORD) {
-    resetStatus.textContent = 'Wrong password';
-    return;
+    db.collection("tokens").doc(String(i))
+      .onSnapshot(doc => {
+        if (doc.exists && doc.data().redeemed) {
+          t.classList.add("redeemed");
+          t.innerText = "REDEEMED";
+        }
+      });
   }
-  tokensRef.set({1:false,2:false,3:false,4:false,5:false,6:false});
-  resetStatus.textContent = 'Tokens reset';
-  resetInput.value = '';
-};
+}
+
+function redeem(i) {
+  db.collection("tokens").doc(String(i)).set({ redeemed: true });
+}
+
+function resetTokens() {
+  if (resetInput.value !== RESET_PASSWORD) return alert("Wrong password");
+  for (let i = 0; i < TOTAL; i++) {
+    db.collection("tokens").doc(String(i)).set({ redeemed: false });
+  }
+}
+
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+/* SWIPE TO FLIP */
+let startX = 0;
+card.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+card.addEventListener("touchend", e => {
+  if (Math.abs(e.changedTouches[0].clientX - startX) > 50) {
+    card.classList.toggle("flipped");
+  }
+});

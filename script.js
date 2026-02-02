@@ -87,7 +87,6 @@ function toggleDark() {
     btn.innerText = "🌙";
   }
 }
-}
 
 /* =====================
    FLIP

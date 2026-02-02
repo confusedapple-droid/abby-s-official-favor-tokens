@@ -3,179 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Genie Favor Card</title>
+<title>Favor Tokens</title>
 
 <meta name="theme-color" content="#ff69b4">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
-:root{--bg1:#ffd1ea;--bg2:#ff69b4;--card1:#ffd700;--card2:#ff9acb;--ink:#fff;}
-body.dark{--bg1:#1b1b2f;--bg2:#16213e;--card1:#0f3460;--card2:#533483;--ink:#f5f5f5;}
+:root{
+  --bg1:#ffd1ea; --bg2:#ff69b4;
+  --card1:#ffd700; --card2:#ff9acb;
+  --ink:#ffffff;
+}
+body.dark{
+  --bg1:#1b1b2f; --bg2:#16213e;
+  --card1:#0f3460; --card2:#533483;
+  --ink:#f5f5f5;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
-background:radial-gradient(circle at top,var(--bg1),var(--bg2));
-display:flex;align-items:center;justify-content:center;height:100dvh;color:var(--ink);}
-
-.lock{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
-background:radial-gradient(circle at top,var(--bg1),var(--bg2));}
-.lock-box{background:linear-gradient(135deg,var(--card1),var(--card2));
-padding:28px;border-radius:24px;width:300px;box-shadow:0 20px 40px rgba(0,0,0,.4);text-align:center;}
-.lock-box input{width:100%;padding:14px;border-radius:14px;border:none;font-size:1rem;text-align:center;}
-
-.card-container{width:min(92vw,380px);aspect-ratio:9/16;perspective:1200px;display:none;}
-.card{width:100%;height:100%;position:relative;transform-style:preserve-3d;
-transition:.8s cubic-bezier(.4,.2,.2,1);}
-.card.flipped{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;
-border:2px solid rgba(255,255,255,.8);box-shadow:0 30px 60px rgba(0,0,0,.35);
-display:flex;flex-direction:column;overflow:hidden;}
-.front{background:linear-gradient(135deg,var(--card1),var(--card2));}
-.back{background:linear-gradient(135deg,var(--card2),var(--card1));transform:rotateY(180deg);}
-
-.header{padding:22px;text-align:center;font-weight:900;letter-spacing:3px;font-size:1.4rem;}
-.grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);
-gap:14px;padding:0 18px 12px;}
-
-.slot{background:rgba(255,255,255,.25);border:2px dashed rgba(255,255,255,.9);
-border-radius:16px;position:relative;overflow:hidden;}
-canvas{width:100%;height:100%;touch-action:none;}
-.slot.used canvas{opacity:.25;pointer-events:none;}
-
-.stamp{position:absolute;top:50%;left:50%;
-transform:translate(-50%,-50%) rotate(-20deg) scale(2);
-background:#fff;color:#ff69b4;
-border:3px solid #ff69b4;
-padding:6px 12px;font-weight:900;letter-spacing:2px;
-opacity:0;pointer-events:none;}
-
-.slot.used .stamp{animation:stamp .35s ease-out forwards;}
-@keyframes stamp{
- from{opacity:0;transform:translate(-50%,-50%) rotate(-20deg) scale(2);}
- to{opacity:1;transform:translate(-50%,-50%) rotate(-12deg) scale(1);}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
+  background:radial-gradient(circle at top,var(--bg1),var(--bg2));
+  height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--ink);
 }
 
-.footer{padding:16px;display:flex;flex-direction:column;gap:10px;}
-button{border:none;border-radius:14px;padding:14px;font-weight:800;cursor:pointer;}
-.primary{background:#fff;color:#ff69b4}
-.secondary{background:rgba(255,255,255,.85)}
-input.reset{margin:16px;border-radius:14px;border:none;padding:14px;font-size:1rem;text-align:center;}
+/* LOCK SCREEN */
+.lock{
+  position:fixed; inset:0; z-index:10;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at top,var(--bg1),var(--bg2));
+}
+.lock-box{
+  background:linear-gradient(135deg,var(--card1),var(--card2));
+  padding:28px;
+  border-radius:24px;
+  width:300px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+.lock-box input{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  font-size:1rem;
+  text-align:center;
+}
 
-.rules{padding:20px;font-weight:700;line-height:1.6;}
+/* CARD */
+.card-container{
+  width:min(92vw,380px);
+  aspect-ratio:9/16;
+  perspective:1200px;
+  display:none;
+}
+.card{
+  width:100%; height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:.8s cubic-bezier(.4,.2,.2,1);
+}
+.card.flipped{ transform:rotateY(180deg); }
+
+.face{
+  position:absolute; inset:0;
+  border-radius:28px;
+  backface-visibility:hidden;
+  border:2px solid rgba(255,255,255,.8);
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.front{
+  background:linear-gradient(135deg,var(--card1),var(--card2));
+}
+.back{
+  background:linear-gradient(135deg,var(--card2),var(--card1));
+  transform:rotateY(180deg);
+}
+
+/* HEADER */
+.header{
+  padding:22px;
+  text-align:center;
+  font-weight:900;
+  letter-spacing:3px;
+  font-size:1.4rem;
+}
+
+/* GRID */
+.grid{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(3,1fr);
+  gap:14px;
+  padding:0 18px 12px;
+}
+
+/* SLOT */
+.slot{
+  background:rgba(255,255,255,.25);
+  border:2px dashed rgba(255,255,255,.9);
+  border-radius:16px;
+  position:relative;
+  overflow:hidden;
+}
+canvas{
+  width:100%;
+  height:100%;
+  touch-action:none;
+}
+.slot.used canvas{
+  opacity:.25;
+  pointer-events:none;
+}
+
+/* STAMP */
+.stamp{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%) rotate(-20deg) scale(2);
+  background:#fff;
+  color:#ff69b4;
+  border:3px solid #ff69b4;
+  padding:6px 12px;
+  font-weight:900;
+  letter-spacing:2px;
+  opacity:0;
+  pointer-events:none;
+}
+.slot.used .stamp{
+  animation:stamp .35s ease-out forwards;
+}
+@keyframes stamp{
+  to{
+    opacity:1;
+    transform:translate(-50%,-50%) rotate(-12deg) scale(1);
+  }
+}
+
+/* FOOTER */
+.footer{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+button{
+  border:none;
+  border-radius:14px;
+  padding:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+.primary{ background:#fff; color:#ff69b4; }
+.secondary{ background:rgba(255,255,255,.85); }
+
+/* BACK */
+.rules{
+  padding:20px;
+  font-weight:700;
+  line-height:1.6;
+}
+input.reset{
+  margin:16px;
+  border-radius:14px;
+  border:none;
+  padding:14px;
+  font-size:1rem;
+  text-align:center;
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOCK -->
 <div class="lock" id="lock">
- <div class="lock-box">
-  <h2>Enter Genie ID</h2>
-  <input id="genieInput" placeholder="Genie ID">
- </div>
+  <div class="lock-box">
+    <h2>Enter Genie ID</h2>
+    <input id="genieInput" placeholder="Genie ID">
+  </div>
 </div>
 
+<!-- CARD -->
 <div class="card-container" id="app">
- <div class="card" id="card">
+  <div class="card" id="card">
 
-  <div class="face front">
-   <div class="header">FAVOR TOKENS</div>
-   <div class="grid" id="grid"></div>
-   <div class="footer">
-    <button class="secondary" id="themeBtn">🌙 Dark Mode</button>
-    <button class="primary" id="flipBtn">Rules & Reset</button>
-   </div>
+    <!-- FRONT -->
+    <div class="face front">
+      <div class="header">FAVOR TOKENS</div>
+      <div class="grid" id="grid"></div>
+      <div class="footer">
+        <button class="secondary" id="themeBtn">🌙 Dark Mode</button>
+        <button class="primary" id="flipBtn">Rules & Reset</button>
+      </div>
+    </div>
+
+    <!-- BACK -->
+    <div class="face back" id="backFace">
+      <div class="header">GENIE RULES</div>
+      <div class="rules">
+        • No wishing for more wishes<br>
+        • No bringing back the dead<br>
+        • No forcing love<br>
+        • Tokens are non-transferable<br><br>
+        (Tap background to return)
+      </div>
+      <input class="reset" id="resetInput" placeholder="Reset Password">
+    </div>
+
   </div>
+</div>
 
- <div class="face back">
-  const backFace = document.querySelector(".face.back");
+<script>
+const lock = document.getElementById("lock");
+const app = document.getElementById("app");
+const card = document.getElementById("card");
+const backFace = document.getElementById("backFace");
 
-backFace.addEventListener("click", (e) => {
-  // Only flip if the background itself was tapped
-  if (e.target === backFace) {
+const RESET_HASH = "3a7bd3e2360a3d29eea436fcfb7e44c735d117c4"; // sha256("apple").slice(0,40)
+
+async function sha(t){
+  const b=new TextEncoder().encode(t);
+  const h=await crypto.subtle.digest("SHA-256",b);
+  return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+
+/* UNLOCK */
+genieInput.addEventListener("change", async e=>{
+  lock.style.display="none";
+  app.style.display="block";
+});
+
+/* FLIP */
+flipBtn.onclick = () => card.classList.add("flipped");
+
+/* TAP BACKGROUND TO RETURN */
+backFace.addEventListener("click", e=>{
+  if(e.target === backFace){
     card.classList.remove("flipped");
   }
 });
 
+/* THEME */
+themeBtn.onclick = ()=>{
+  document.body.classList.toggle("dark");
+};
 
-<script>
-const APPLE_HASH="3a7bd3e2360a3d29eea4";
-let genieKey=null;
-let state={tokens:[0,0,0,0,0,0],theme:"light"};
+/* GRID */
+const grid = document.getElementById("grid");
+const slots = [];
+const state = Array(6).fill(0);
 
-async function sha(t){
- const b=new TextEncoder().encode(t);
- const h=await crypto.subtle.digest("SHA-256",b);
- return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
-}
-
-/* Unlock */
-genieInput.addEventListener("change",async e=>{
- genieKey=(await sha(e.target.value)).slice(0,20);
- lock.style.display="none";
- app.style.display="block";
-});
-
-/* Flip */
-flipBtn.onclick=()=>card.classList.toggle("flipped");
-
-/* Theme */
-themeBtn.onclick=()=>document.body.classList.toggle("dark");
-
-/* Slots */
-const grid=document.getElementById("grid");
-const slots=[];
 for(let i=0;i<6;i++){
- const s=document.createElement("div");
- s.className="slot";
- s.innerHTML='<canvas></canvas><div class="stamp">REDEEMED</div>';
- grid.appendChild(s);
- slots.push(s);
+  const s=document.createElement("div");
+  s.className="slot";
+  s.innerHTML='<canvas></canvas><div class="stamp">REDEEMED</div>';
+  grid.appendChild(s);
+  slots.push(s);
 
- const c=s.querySelector("canvas");
- const ctx=c.getContext("2d");
- let drawing=false;
+  const c=s.querySelector("canvas");
+  const ctx=c.getContext("2d");
+  let drawing=false;
 
- function resize(){
-  const r=c.getBoundingClientRect();
-  c.width=r.width*devicePixelRatio;
-  c.height=r.height*devicePixelRatio;
-  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
- }
- resize();window.addEventListener("resize",resize);
+  function resize(){
+    const r=c.getBoundingClientRect();
+    c.width=r.width*devicePixelRatio;
+    c.height=r.height*devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  }
+  resize(); window.addEventListener("resize",resize);
 
- function start(e){if(state.tokens[i])return;drawing=true;ctx.beginPath();draw(e);}
- function draw(e){
-  if(!drawing)return;
-  const r=c.getBoundingClientRect();
-  const t=e.touches?e.touches[0]:e;
-  ctx.strokeStyle="#ff69b4";ctx.lineWidth=3;ctx.lineCap="round";
-  ctx.lineTo(t.clientX-r.left,t.clientY-r.top);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(t.clientX-r.left,t.clientY-r.top);
- }
- function end(){
-  if(!drawing)return;
-  drawing=false;
-  state.tokens[i]=1;
-  s.classList.add("used");
- }
+  function start(e){
+    if(state[i]) return;
+    drawing=true;
+    ctx.beginPath();
+    draw(e);
+  }
+  function draw(e){
+    if(!drawing) return;
+    const r=c.getBoundingClientRect();
+    const t=e.touches?e.touches[0]:e;
+    ctx.strokeStyle="#ff69b4";
+    ctx.lineWidth=3;
+    ctx.lineCap="round";
+    ctx.lineTo(t.clientX-r.left,t.clientY-r.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(t.clientX-r.left,t.clientY-r.top);
+  }
+  function end(){
+    if(!drawing) return;
+    drawing=false;
+    state[i]=1;
+    s.classList.add("used");
+  }
 
- c.addEventListener("mousedown",start);
- c.addEventListener("mousemove",draw);
- c.addEventListener("mouseup",end);
- c.addEventListener("touchstart",e=>{e.preventDefault();start(e)});
- c.addEventListener("touchmove",e=>{e.preventDefault();draw(e)});
- c.addEventListener("touchend",end);
+  c.addEventListener("mousedown",start);
+  c.addEventListener("mousemove",draw);
+  c.addEventListener("mouseup",end);
+  c.addEventListener("touchstart",e=>{e.preventDefault();start(e)});
+  c.addEventListener("touchmove",e=>{e.preventDefault();draw(e)});
+  c.addEventListener("touchend",end);
 }
 
-/* Reset */
-resetInput.addEventListener("change",async e=>{
- if((await sha(e.target.value)).slice(0,20)===APPLE_HASH){
-  state.tokens=[0,0,0,0,0,0];
-  slots.forEach(s=>s.classList.remove("used"));
-  card.classList.remove("flipped");
-  e.target.value="";
- }
+/* RESET */
+resetInput.addEventListener("change", async e=>{
+  if((await sha(e.target.value)).startsWith(RESET_HASH)){
+    state.fill(0);
+    slots.forEach(s=>s.classList.remove("used"));
+    card.classList.remove("flipped");
+    e.target.value="";
+  }
 });
 </script>
 
 </body>
 </html>
+

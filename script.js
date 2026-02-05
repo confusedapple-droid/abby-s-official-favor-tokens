@@ -9,6 +9,40 @@ const grid = document.getElementById("tokenGrid");
 const resetInput = document.getElementById("resetInput");
 
 /* =====================
+   PHILIPPINE TIME CHECK
+===================== */
+function isFeb28PHTime() {
+  const nowUTC = new Date();
+  const phTime = new Date(nowUTC.getTime() + 8 * 60 * 60 * 1000);
+  return phTime.getMonth() === 1 && phTime.getDate() === 28;
+}
+
+/* =====================
+   MESSAGE PAGE
+===================== */
+function showMessagePage() {
+  lockScreen.classList.add("hidden");
+  card.classList.add("hidden");
+
+  const page = document.getElementById("messagePage");
+  page.classList.remove("hidden");
+
+  const music = document.getElementById("messageMusic");
+  music.volume = 0.6;
+  music.currentTime = 0; // play once from start
+  music.play().catch(() => {});
+}
+
+function toggleMessageMusic() {
+  const music = document.getElementById("messageMusic");
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
+}
+
+/* =====================
    UNLOCK
 ===================== */
 function unlock() {
@@ -18,6 +52,14 @@ function unlock() {
     lockScreen.classList.add("hidden");
     card.classList.remove("hidden");
     loadTokens();
+
+  } else if (input === "022801") {
+    if (isFeb28PHTime()) {
+      showMessagePage();
+    } else {
+      alert("💗 This message unlocks on February 28 (Philippine Time)");
+    }
+
   } else {
     alert("Wrong access password");
   }
@@ -79,12 +121,7 @@ function toggleDark() {
   const btn = document.getElementById("themeToggle");
 
   body.classList.toggle("dark");
-
-  if (body.classList.contains("dark")) {
-    btn.innerText = "☀️";
-  } else {
-    btn.innerText = "🌙";
-  }
+  btn.innerText = body.classList.contains("dark") ? "☀️" : "🌙";
 }
 
 /* =====================
@@ -98,6 +135,7 @@ function flipCard() {
    SWIPE
 ===================== */
 let startX = 0;
+
 card.addEventListener("touchstart", e => {
   startX = e.touches[0].clientX;
 });
